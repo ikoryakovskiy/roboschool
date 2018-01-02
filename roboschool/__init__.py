@@ -59,7 +59,13 @@ register(
     reward_threshold=3000.0,
     tags={ "pg_complexity": 8*1000000 },
     )
-
+register(
+    id='RoboschoolHalfCheetahBalancing-v1',
+    entry_point='roboschool:RoboschoolHalfCheetahBalancing',
+    max_episode_steps=1000,
+    reward_threshold=3000.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
 register(
     id='RoboschoolAnt-v1',
     entry_point='roboschool:RoboschoolAnt',
@@ -117,6 +123,7 @@ from roboschool.gym_mujoco_walkers import RoboschoolHopper
 from roboschool.gym_mujoco_walkers import RoboschoolWalker2d
 from roboschool.gym_mujoco_walkers import RoboschoolWalker2dBalancing
 from roboschool.gym_mujoco_walkers import RoboschoolHalfCheetah
+from roboschool.gym_mujoco_walkers import RoboschoolHalfCheetahBalancing
 from roboschool.gym_mujoco_walkers import RoboschoolAnt
 from roboschool.gym_mujoco_walkers import RoboschoolHumanoid
 from roboschool.gym_humanoid_flagrun import RoboschoolHumanoidFlagrun

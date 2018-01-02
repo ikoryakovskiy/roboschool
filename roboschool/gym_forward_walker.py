@@ -144,7 +144,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         str_info = {}
         if done and self.test:
             ti = self.frame * self.TIMESTEP
-            str_info = "{:15d}{:15d}".format(ti, self.falls) # cumulative number of falls
+            str_info = "{:15f}{:15d}".format(ti, self.falls) # cumulative number of falls
         return state, sum(self.rewards), bool(done), str_info
 
     def episode_over(self, frames):
