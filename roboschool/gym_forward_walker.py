@@ -5,7 +5,7 @@ from roboschool.gym_mujoco_xml_env import RoboschoolMujocoXmlEnv
 import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import os, sys
-import pdb
+import pdb, traceback
 
 class RoboschoolForwardWalker(SharedMemoryClientEnv):
     def __init__(self, power):
@@ -25,6 +25,9 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
 
     def robot_specific_reset(self):
+        for line in traceback.format_stack():
+            print(line.strip())
+        pdb.set_trace()
         pos_noise = 0
         for j in self.ordered_joints:
             if not self.test:
@@ -103,6 +106,8 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         done = alive < 0
         if done and not self.test:
             self.falls += 1
+        if self.test:
+            pdb.set_trace()
         if not np.isfinite(state).all():
             print("~INF~", state)
             done = True
@@ -141,11 +146,6 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.HUD(state, a, done)
         str_info = "{:15d}".format(self.falls) # cumulative number of falls
         return state, sum(self.rewards), bool(done), str_info
-
-    def set_test(self, test=False):
-        """ Use before reset() to select type of environment: learning or testing """
-        pdb.set_trace()
-        self.test = test
 
     def episode_over(self, frames):
         pass
