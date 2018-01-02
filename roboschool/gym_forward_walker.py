@@ -18,6 +18,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.camera_y = 4.3
         self.camera_z = 45.0
         self.camera_follow = 0
+        self.falls = 0
 
     def create_single_player_scene(self):
         return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
@@ -96,13 +97,15 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
 
         alive = float(self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1]))   # state[0] is body height above ground, body_rpy[1] is pitch
         done = alive < 0
+        if done:
+            self.falls += 1
         if not np.isfinite(state).all():
             print("~INF~", state)
             done = True
 
         potential_old = self.potential
         self.potential = self.calc_potential()
-        pdb.set_trace()
+        #pdb.set_trace()
         progress = self.progress * float(self.potential - potential_old)
 
         feet_collision_cost = 0.0
@@ -132,7 +135,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.done   += done   # 2 == 1+True
         self.reward += sum(self.rewards)
         self.HUD(state, a, done)
-        str_info = "{:15d}".format(self.done) # cumulative number of falls
+        str_info = "{:15d}".format(self.falls) # cumulative number of falls
         return state, sum(self.rewards), bool(done), str_info
 
     def episode_over(self, frames):
