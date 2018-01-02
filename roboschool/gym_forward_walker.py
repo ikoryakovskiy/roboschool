@@ -5,6 +5,7 @@ from roboschool.gym_mujoco_xml_env import RoboschoolMujocoXmlEnv
 import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import os, sys
+import pdb
 
 class RoboschoolForwardWalker(SharedMemoryClientEnv):
     def __init__(self, power):
@@ -101,7 +102,8 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
 
         potential_old = self.potential
         self.potential = self.calc_potential()
-        progress = float(self.potential - potential_old)
+        pdb.set_trace()
+        progress = self.progress * float(self.potential - potential_old)
 
         feet_collision_cost = 0.0
         for i,f in enumerate(self.feet):

@@ -46,6 +46,13 @@ register(
     tags={ "pg_complexity": 8*1000000 },
     )
 register(
+    id='RoboschoolWalker2dBalancing-v1',
+    entry_point='roboschool:RoboschoolWalker2dBalancing',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
     id='RoboschoolHalfCheetah-v1',
     entry_point='roboschool:RoboschoolHalfCheetah',
     max_episode_steps=1000,

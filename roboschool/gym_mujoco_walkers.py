@@ -29,6 +29,18 @@ class RoboschoolWalker2d(RoboschoolForwardWalkerMujocoXML):
         for n in ["foot_joint", "foot_left_joint"]:
             self.jdict[n].power_coef = 30.0
 
+class RoboschoolWalker2dBalancing(RoboschoolForwardWalkerMujocoXML):
+    foot_list = ["foot", "foot_left"]
+    progress = 0
+    def __init__(self):
+        RoboschoolForwardWalkerMujocoXML.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
+    def alive_bonus(self, z, pitch):
+        return +1 if z > 0.8 and abs(pitch) < 1.0 else -1
+    def robot_specific_reset(self):
+        RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
+        for n in ["foot_joint", "foot_left_joint"]:
+            self.jdict[n].power_coef = 30.0
+
 class RoboschoolHalfCheetah(RoboschoolForwardWalkerMujocoXML):
     foot_list = ["ffoot", "fshin", "fthigh",  "bfoot", "bshin", "bthigh"]  # track these contacts with ground
     def __init__(self):
