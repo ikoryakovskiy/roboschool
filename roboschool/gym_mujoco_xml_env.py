@@ -35,7 +35,7 @@ class RoboschoolMujocoXmlEnv(gym.Env):
         self.np_random, seed = gym.utils.seeding.np_random(seed)
         return [seed]
 
-    def _reset(self):
+    def _reset(self, test=False, **kwargs):
         if self.scene is None:
             self.scene = self.create_single_player_scene()
         if not self.scene.multiplayer:
@@ -47,6 +47,7 @@ class RoboschoolMujocoXmlEnv(gym.Env):
         self.frame = 0
         self.done = 0
         self.reward = 0
+        self.test = test
         dump = 0
         for r in self.mjcf:
             if dump: print("ROBOT '%s'" % r.root_part.name)
