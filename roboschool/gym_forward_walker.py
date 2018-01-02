@@ -25,8 +25,11 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
 
     def robot_specific_reset(self):
+        pos_noise = 0
         for j in self.ordered_joints:
-            j.reset_current_position(self.np_random.uniform( low=-0.1, high=0.1 ), 0)
+            if not self.test:
+                pos_noise = self.np_random.uniform(low=-0.1, high=0.1)
+            j.reset_current_position(pos_noise, 0)
         self.feet = [self.parts[f] for f in self.foot_list]
         self.feet_contact = np.array([0.0 for f in self.foot_list], dtype=np.float32)
         self.scene.actor_introduce(self)
