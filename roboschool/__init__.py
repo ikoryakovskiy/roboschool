@@ -115,6 +115,7 @@ from roboschool.gym_pendulums import RoboschoolInvertedDoublePendulum
 from roboschool.gym_reacher import RoboschoolReacher
 from roboschool.gym_mujoco_walkers import RoboschoolHopper
 from roboschool.gym_mujoco_walkers import RoboschoolWalker2d
+from roboschool.gym_mujoco_walkers import RoboschoolWalker2dBalancing
 from roboschool.gym_mujoco_walkers import RoboschoolHalfCheetah
 from roboschool.gym_mujoco_walkers import RoboschoolAnt
 from roboschool.gym_mujoco_walkers import RoboschoolHumanoid

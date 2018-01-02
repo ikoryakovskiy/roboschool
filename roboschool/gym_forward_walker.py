@@ -132,7 +132,8 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.done   += done   # 2 == 1+True
         self.reward += sum(self.rewards)
         self.HUD(state, a, done)
-        return state, sum(self.rewards), bool(done), {}
+        str_info = "{:15d}".format(self.done) # cumulative number of falls
+        return state, sum(self.rewards), bool(done), str_info
 
     def episode_over(self, frames):
         pass
