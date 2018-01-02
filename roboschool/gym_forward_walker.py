@@ -8,6 +8,9 @@ import os, sys
 import pdb, traceback
 
 class RoboschoolForwardWalker(SharedMemoryClientEnv):
+
+    TIMESTEP = 0.0165
+
     def __init__(self, power):
         self.power = power
         self.camera_x = 0
@@ -22,12 +25,9 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.test = False
 
     def create_single_player_scene(self):
-        return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
+        return SinglePlayerStadiumScene(gravity=9.8, timestep=self.TIMESTEP/4, frame_skip=4)
 
     def robot_specific_reset(self):
-        for line in traceback.format_stack():
-            print(line.strip())
-        pdb.set_trace()
         pos_noise = 0
         for j in self.ordered_joints:
             if not self.test:
@@ -106,15 +106,12 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         done = alive < 0
         if done and not self.test:
             self.falls += 1
-        if self.test:
-            pdb.set_trace()
         if not np.isfinite(state).all():
             print("~INF~", state)
             done = True
 
         potential_old = self.potential
         self.potential = self.calc_potential()
-        #pdb.set_trace()
         progress = self.progress * float(self.potential - potential_old)
 
         feet_collision_cost = 0.0
@@ -144,7 +141,10 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.done   += done   # 2 == 1+True
         self.reward += sum(self.rewards)
         self.HUD(state, a, done)
-        str_info = "{:15d}".format(self.falls) # cumulative number of falls
+        str_info = {}
+        if done and self.test:
+            ti = self.frame * self.TIMESTEP
+            str_info = "{:15d}{:15d}".format(ti, self.falls) # cumulative number of falls
         return state, sum(self.rewards), bool(done), str_info
 
     def episode_over(self, frames):
