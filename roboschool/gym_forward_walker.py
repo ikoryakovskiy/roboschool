@@ -19,6 +19,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.camera_z = 45.0
         self.camera_follow = 0
         self.falls = 0
+        self.test = False
 
     def create_single_player_scene(self):
         return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
@@ -97,7 +98,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
 
         alive = float(self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1]))   # state[0] is body height above ground, body_rpy[1] is pitch
         done = alive < 0
-        if done:
+        if done and not self.test:
             self.falls += 1
         if not np.isfinite(state).all():
             print("~INF~", state)
@@ -137,6 +138,11 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.HUD(state, a, done)
         str_info = "{:15d}".format(self.falls) # cumulative number of falls
         return state, sum(self.rewards), bool(done), str_info
+
+    def set_test(self, test=False):
+        """ Use before reset() to select type of environment: learning or testing """
+        pdb.set_trace()
+        self.test = test
 
     def episode_over(self, frames):
         pass
