@@ -106,8 +106,10 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         done = alive < 0
         if done and not self.test:
             self.falls += 1
+        str_inf = ""
         if not np.isfinite(state).all():
             print("~INF~", state)
+            str_inf = "   ~INF~"
             done = True
 
         potential_old = self.potential
@@ -142,9 +144,9 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.reward += sum(self.rewards)
         self.HUD(state, a, done)
         str_info = {}
-        if done and self.test:
-            ti = self.frame * self.TIMESTEP
-            str_info = "{:15f}{:15d}".format(ti, self.falls) # cumulative number of falls
+        #if done and self.test:
+        ti = self.frame * self.TIMESTEP
+        str_info = "{:15f}{:15d}{:15d}{:15d}{}".format(ti, self.falls, int(done), int(self.test), str_inf) # cumulative number of falls
         return state, sum(self.rewards), bool(done), str_info
 
     def episode_over(self, frames):
