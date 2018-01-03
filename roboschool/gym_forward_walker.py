@@ -51,7 +51,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         for n,j in enumerate(self.ordered_joints):
             j.set_motor_torque( self.power*j.power_coef*float(np.clip(a[n], -1, +1)) )
 
-    def calc_state(self):
+    def calc_state(self, init=0):
         j = np.array([j.current_relative_position() for j in self.ordered_joints], dtype=np.float32).flatten()
         # even elements [0::2] position, scaled to -1..+1 between limits
         # odd elements  [1::2] angular speed, scaled to show -1..+1
@@ -82,7 +82,12 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
             np.sin(self.angle_to_target), np.cos(self.angle_to_target),
             0.3*vx, 0.3*vy, 0.3*vz,    # 0.3 is just scaling typical speed into -1..+1, no physical sense here
             r, p], dtype=np.float32)
-        return np.clip( np.concatenate([more] + [j] + [self.feet_contact]), -5, +5)
+
+        # finally add forward displacement
+        fw = 0
+        if not init:
+            fw = self.calc_potential() - self.potential
+        return np.concatenate([np.clip( np.concatenate([more] + [j] + [self.feet_contact]), -5, +5)] + [fw])
 
     def calc_potential(self):
         # progress in potential field is speed*dt, typical speed is about 2-3 meter per second, this potential will change 2-3 per frame (not per second),

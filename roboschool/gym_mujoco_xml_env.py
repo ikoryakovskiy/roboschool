@@ -72,7 +72,7 @@ class RoboschoolMujocoXmlEnv(gym.Env):
         self.robot_specific_reset()
         for r in self.mjcf:
             r.query_position()
-        s = self.calc_state()    # optimization: calc_state() can calculate something in self.* for calc_potential() to use
+        s = self.calc_state(init=1)    # optimization: calc_state() can calculate something in self.* for calc_potential() to use
         self.potential = self.calc_potential()
         self.camera = self.scene.cpp_world.new_camera_free_float(self.VIDEO_W, self.VIDEO_H, "video_camera")
         return s
