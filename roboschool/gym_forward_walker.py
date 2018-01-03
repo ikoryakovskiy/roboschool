@@ -145,7 +145,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         if self.test:
             ti = self.frame * self.TIMESTEP
             walk_dist  = np.linalg.norm( [self.body_xyz[1], self.body_xyz[0]] )
-            str_info = "{:15f}{:15d}{:15d}{:15d}{}".format(ti, self.falls, walk_dist)
+            str_info = "{:15f}{:15d}{:15f}".format(ti, self.falls, walk_dist)
         return state, sum(self.rewards), done, str_info
 
     def episode_over(self, frames):
