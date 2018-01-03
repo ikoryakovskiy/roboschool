@@ -87,7 +87,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         fw = 0
         if not init:
             fw = self.calc_potential() - self.potential
-        return np.concatenate([np.clip( np.concatenate([more] + [j] + [self.feet_contact]), -5, +5)] + [fw])
+        return np.concatenate( (np.clip(np.concatenate([more] + [j] + [self.feet_contact]), -5, +5), np.array([fw])) )
 
     def calc_potential(self):
         # progress in potential field is speed*dt, typical speed is about 2-3 meter per second, this potential will change 2-3 per frame (not per second),
