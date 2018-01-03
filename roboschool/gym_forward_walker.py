@@ -103,14 +103,12 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         state = self.calc_state()  # also calculates self.joints_at_limit
 
         alive = float(self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1]))   # state[0] is body height above ground, body_rpy[1] is pitch
-        done = alive < 0
+        done = 2*int(alive < 0)
         if done and not self.test:
             self.falls += 1
-        str_inf = ""
         if not np.isfinite(state).all():
             print("~INF~", state)
-            str_inf = "   ~INF~"
-            done = True
+            done = 2
 
         potential_old = self.potential
         self.potential = self.calc_potential()
@@ -140,14 +138,15 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.frame  += 1
         if (done and not self.done) or self.frame==self.spec.timestep_limit:
             self.episode_over(self.frame)
-        self.done   += done   # 2 == 1+True
+        self.done   += bool(done)   # 2 == 1+True
         self.reward += sum(self.rewards)
         self.HUD(state, a, done)
         str_info = {}
-        #if done and self.test:
-        ti = self.frame * self.TIMESTEP
-        str_info = "{:15f}{:15d}{:15d}{:15d}{}".format(ti, self.falls, int(done), int(self.test), str_inf) # cumulative number of falls
-        return state, sum(self.rewards), bool(done), str_info
+        if self.test:
+            ti = self.frame * self.TIMESTEP
+            walk_dist  = np.linalg.norm( [self.body_xyz[1], self.body_xyz[0]] )
+            str_info = "{:15f}{:15d}{:15d}{:15d}{}".format(ti, self.falls, walk_dist)
+        return state, sum(self.rewards), done, str_info
 
     def episode_over(self, frames):
         pass
