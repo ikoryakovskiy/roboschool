@@ -106,6 +106,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
             self.scene.global_step()
 
         state = self.calc_state()  # also calculates self.joints_at_limit
+        pdb.set_trace()
 
         alive = float(self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1]))   # state[0] is body height above ground, body_rpy[1] is pitch
         done = 2*int(alive < 0)
@@ -114,10 +115,12 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         if not np.isfinite(state).all():
             print("~INF~", state)
             done = 2
+        alive += self.rwTime
 
         potential_old = self.potential
         self.potential = self.calc_potential()
         progress = self.progress * float(self.potential - potential_old)
+        progress *= self.rwForward
 
         feet_collision_cost = 0.0
         for i,f in enumerate(self.feet):
@@ -129,6 +132,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
 
         electricity_cost  = self.electricity_cost  * float(np.abs(a*self.joint_speeds).mean())  # let's assume we have DC motor with controller, and reverse current braking
         electricity_cost += self.stall_torque_cost * float(np.square(a).mean())
+        electricity_cost *= self.rwWork
 
         joints_at_limit_cost = float(self.joints_at_limit_cost * self.joints_at_limit)
 

@@ -6,56 +6,56 @@ import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import os, sys
 
-class RoboschoolForwardWalkerMujocoXML(RoboschoolForwardWalker, RoboschoolMujocoXmlEnv):
-    rwFail = -1
-    rwAlive = +1
-    rwForward = 1
-    rwTime = 0
+class RoboschoolForwardWalkerMujocoXMLGRL(RoboschoolForwardWalker, RoboschoolMujocoXmlEnv):
+    rwFail = -75
+    rwAlive = 0
+    rwForward = 300
+    rwTime = -1.5
     rwWork = 1
 
     def __init__(self, fn, robot_name, action_dim, obs_dim, power):
         RoboschoolMujocoXmlEnv.__init__(self, fn, robot_name, action_dim, obs_dim)
         RoboschoolForwardWalker.__init__(self, power)
 
-class RoboschoolHopper(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolHopperGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["foot"]
     def __init__(self):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, "hopper.xml", "torso", action_dim=3, obs_dim=15, power=0.75)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "hopper.xml", "torso", action_dim=3, obs_dim=15, power=0.75)
     def alive_bonus(self, z, pitch):
         return self.rwAlive if z > 0.8 and abs(pitch) < 1.0 else self.rwFail
 
-class RoboschoolWalker2d(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolWalker2dGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["foot", "foot_left"]
     def __init__(self):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
     def alive_bonus(self, z, pitch):
         return self.rwAlive if z > 0.8 and abs(pitch) < 1.0 else self.rwFail
     def robot_specific_reset(self):
-        RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
+        RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         for n in ["foot_joint", "foot_left_joint"]:
             self.jdict[n].power_coef = 30.0
 
-class RoboschoolWalker2dBalancing(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolWalker2dBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["foot", "foot_left"]
     progress = 0
     def __init__(self):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
     def alive_bonus(self, z, pitch):
         return self.rwAlive if z > 0.8 and abs(pitch) < 1.0 else self.rwFail
     def robot_specific_reset(self):
-        RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
+        RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         for n in ["foot_joint", "foot_left_joint"]:
             self.jdict[n].power_coef = 30.0
 
-class RoboschoolHalfCheetah(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolHalfCheetahGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["ffoot", "fshin", "fthigh",  "bfoot", "bshin", "bthigh"]  # track these contacts with ground
     def __init__(self):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
         return self.rwAlive if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else self.rwFail
     def robot_specific_reset(self):
-        RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
+        RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0
         self.jdict["bshin"].power_coef  = 90.0
         self.jdict["bfoot"].power_coef  = 60.0
@@ -63,15 +63,15 @@ class RoboschoolHalfCheetah(RoboschoolForwardWalkerMujocoXML):
         self.jdict["fshin"].power_coef  = 60.0
         self.jdict["ffoot"].power_coef  = 30.0
 
-class RoboschoolHalfCheetahBalancing(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolHalfCheetahBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["ffoot", "fshin", "fthigh",  "bfoot", "bshin", "bthigh"]  # track these contacts with ground
     def __init__(self):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
         return self.rwAlive if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else self.rwFail
     def robot_specific_reset(self):
-        RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
+        RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0
         self.jdict["bshin"].power_coef  = 90.0
         self.jdict["bfoot"].power_coef  = 60.0
@@ -79,29 +79,29 @@ class RoboschoolHalfCheetahBalancing(RoboschoolForwardWalkerMujocoXML):
         self.jdict["fshin"].power_coef  = 60.0
         self.jdict["ffoot"].power_coef  = 30.0
 
-class RoboschoolAnt(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolAntGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ['front_left_foot', 'front_right_foot', 'left_back_foot', 'right_back_foot']
     def __init__(self):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, "ant.xml", "torso", action_dim=8, obs_dim=28, power=2.5)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "ant.xml", "torso", action_dim=8, obs_dim=28, power=2.5)
     def alive_bonus(self, z, pitch):
         return self.rwAlive if z > 0.26 else self.rwFail  # 0.25 is central sphere rad, die if it scrapes the ground
 
 
 ## 3d Humanoid ##
 
-class RoboschoolHumanoid(RoboschoolForwardWalkerMujocoXML):
+class RoboschoolHumanoidGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["right_foot", "left_foot"]
     TASK_WALK, TASK_STAND_UP, TASK_ROLL_OVER, TASKS = range(4)
 
     def __init__(self, model_xml='humanoid_symmetric.xml'):
-        RoboschoolForwardWalkerMujocoXML.__init__(self, model_xml, 'torso', action_dim=17, obs_dim=44, power=0.41)
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, model_xml, 'torso', action_dim=17, obs_dim=44, power=0.41)
         # 17 joints, 4 of them important for walking (hip, knee), others may as well be turned off, 17/4 = 4.25
-        self.electricity_cost  = 4.25*RoboschoolForwardWalkerMujocoXML.electricity_cost
-        self.stall_torque_cost = 4.25*RoboschoolForwardWalkerMujocoXML.stall_torque_cost
+        self.electricity_cost  = 4.25*RoboschoolForwardWalkerMujocoXMLGRL.electricity_cost
+        self.stall_torque_cost = 4.25*RoboschoolForwardWalkerMujocoXMLGRL.stall_torque_cost
         self.initial_z = 0.8
 
     def robot_specific_reset(self):
-        RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
+        RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         self.motor_names  = ["abdomen_z", "abdomen_y", "abdomen_x"]
         self.motor_power  = [100, 100, 100]
         self.motor_names += ["right_hip_x", "right_hip_z", "right_hip_y", "right_knee"]

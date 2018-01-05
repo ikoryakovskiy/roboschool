@@ -81,6 +81,59 @@ register(
     reward_threshold=3500.0,
     tags={ "pg_complexity": 100*1000000 },
     )
+
+############# GRL #############
+register(
+    id='RoboschoolHopperGRL-v1',
+    entry_point='roboschool:RoboschoolHopperGRL',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
+    id='RoboschoolWalker2dGRL-v1',
+    entry_point='roboschool:RoboschoolWalker2dGRL',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
+    id='RoboschoolWalker2dBalancingGRL-v1',
+    entry_point='roboschool:RoboschoolWalker2dBalancingGRL',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
+    id='RoboschoolHalfCheetahGRL-v1',
+    entry_point='roboschool:RoboschoolHalfCheetahGRL',
+    max_episode_steps=1000,
+    reward_threshold=3000.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
+    id='RoboschoolHalfCheetahBalancingGRL-v1',
+    entry_point='roboschool:RoboschoolHalfCheetahBalancingGRL',
+    max_episode_steps=1000,
+    reward_threshold=3000.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
+    id='RoboschoolAntGRL-v1',
+    entry_point='roboschool:RoboschoolAntGRL',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
+    id='RoboschoolHumanoidGRL-v1',
+    entry_point='roboschool:RoboschoolHumanoidGRL',
+    max_episode_steps=1000,
+    reward_threshold=3500.0,
+    tags={ "pg_complexity": 100*1000000 },
+    )
+#############
+
 register(
     id='RoboschoolHumanoidFlagrun-v1',
     entry_point='roboschool:RoboschoolHumanoidFlagrun',
@@ -126,6 +179,13 @@ from roboschool.gym_mujoco_walkers import RoboschoolHalfCheetah
 from roboschool.gym_mujoco_walkers import RoboschoolHalfCheetahBalancing
 from roboschool.gym_mujoco_walkers import RoboschoolAnt
 from roboschool.gym_mujoco_walkers import RoboschoolHumanoid
+from roboschool.grl_mujoco_walkers import RoboschoolHopperGRL
+from roboschool.grl_mujoco_walkers import RoboschoolWalker2dGRL
+from roboschool.grl_mujoco_walkers import RoboschoolWalker2dBalancingGRL
+from roboschool.grl_mujoco_walkers import RoboschoolHalfCheetahGRL
+from roboschool.grl_mujoco_walkers import RoboschoolHalfCheetahBalancingGRL
+from roboschool.grl_mujoco_walkers import RoboschoolAntGRL
+from roboschool.grl_mujoco_walkers import RoboschoolHumanoidGRL
 from roboschool.gym_humanoid_flagrun import RoboschoolHumanoidFlagrun
 from roboschool.gym_humanoid_flagrun import RoboschoolHumanoidFlagrunHarder
 from roboschool.gym_atlas import RoboschoolAtlasForwardWalk
