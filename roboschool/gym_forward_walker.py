@@ -106,7 +106,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
             self.scene.global_step()
 
         state = self.calc_state()  # also calculates self.joints_at_limit
-        pdb.set_trace()
+        #pdb.set_trace()
 
         alive = float(self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1]))   # state[0] is body height above ground, body_rpy[1] is pitch
         done = 2*int(alive < 0)
