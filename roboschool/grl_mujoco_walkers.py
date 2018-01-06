@@ -9,7 +9,7 @@ import os, sys
 class RoboschoolForwardWalkerMujocoXMLGRL(RoboschoolForwardWalker, RoboschoolMujocoXmlEnv):
     rwFail = -75
     rwAlive = 0
-    rwForward = 300
+    rwForward = 3
     rwTime = -1.5
     rwWork = 1
 
