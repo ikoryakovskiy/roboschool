@@ -39,6 +39,13 @@ register(
     tags={ "pg_complexity": 8*1000000 },
     )
 register(
+    id='RoboschoolHopperBalancing-v1',
+    entry_point='roboschool:RoboschoolHopperBalancing',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
     id='RoboschoolWalker2d-v1',
     entry_point='roboschool:RoboschoolWalker2d',
     max_episode_steps=1000,
@@ -180,6 +187,7 @@ from roboschool.gym_pendulums import RoboschoolInvertedPendulumSwingup
 from roboschool.gym_pendulums import RoboschoolInvertedDoublePendulum
 from roboschool.gym_reacher import RoboschoolReacher
 from roboschool.gym_mujoco_walkers import RoboschoolHopper
+from roboschool.gym_mujoco_walkers import RoboschoolHopperBalancing
 from roboschool.gym_mujoco_walkers import RoboschoolWalker2d
 from roboschool.gym_mujoco_walkers import RoboschoolWalker2dBalancing
 from roboschool.gym_mujoco_walkers import RoboschoolHalfCheetah
