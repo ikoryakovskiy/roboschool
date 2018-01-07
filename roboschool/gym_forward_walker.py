@@ -108,13 +108,15 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         state = self.calc_state()  # also calculates self.joints_at_limit
         #pdb.set_trace()
 
-        done, alive = float(self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1]))   # state[0] is body height above ground, body_rpy[1] is pitch
+        done, alive = self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1])   # state[0] is body height above ground, body_rpy[1] is pitch
+        alive = float(alive) + self.rwTime
+
+        # Check for failures
         if done and not self.test:
             self.falls += 1
         if not np.isfinite(state).all():
             print("~INF~", state)
             done = 2
-        alive += self.rwTime
 
         potential_old = self.potential
         self.potential = self.calc_potential()
