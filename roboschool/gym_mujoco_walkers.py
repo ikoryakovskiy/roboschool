@@ -37,9 +37,10 @@ class RoboschoolWalker2d(RoboschoolForwardWalkerMujocoXML):
 
 class RoboschoolWalker2dBalancing(RoboschoolForwardWalkerMujocoXML):
     foot_list = ["foot", "foot_left"]
-    progress = 0
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
+        self.rwForward = 0
+        self.rwTime = 0
     def alive_bonus(self, z, pitch):
         return self.rwAlive if z > 0.8 and abs(pitch) < 1.0 else self.rwFail
     def robot_specific_reset(self):
@@ -67,6 +68,8 @@ class RoboschoolHalfCheetahBalancing(RoboschoolForwardWalkerMujocoXML):
     foot_list = ["ffoot", "fshin", "fthigh",  "bfoot", "bshin", "bthigh"]  # track these contacts with ground
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
+        self.rwForward = 0
+        self.rwTime = 0
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
         return self.rwAlive if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else self.rwFail

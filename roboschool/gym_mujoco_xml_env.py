@@ -17,8 +17,6 @@ class RoboschoolMujocoXmlEnv(gym.Env):
     VIDEO_W = 600  # for video showing the robot, not for camera ON the robot
     VIDEO_H = 400
 
-    progress = 1    # by default consider progress forward in the reward
-
     def __init__(self, model_xml, robot_name, action_dim, obs_dim):
         self.scene = None
 

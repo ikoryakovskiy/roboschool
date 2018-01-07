@@ -119,8 +119,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
 
         potential_old = self.potential
         self.potential = self.calc_potential()
-        progress = self.progress * float(self.potential - potential_old)
-        progress *= self.rwForward
+        progress =  self.rwForward * float(self.potential - potential_old)
 
         feet_collision_cost = 0.0
         for i,f in enumerate(self.feet):
