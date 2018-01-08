@@ -58,10 +58,10 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.joint_speeds = j[1::2]
         self.joints_at_limit = np.count_nonzero(np.abs(j[0::2]) > 0.99)
 
-        body_pose = self.robot_body.pose()
-        parts_xyz = np.array( [p.pose().xyz() for p in self.parts.values()] ).flatten()
+        body_pose = self.robot_body.pose() # pose of torso in global coordinates
+        parts_xyz = np.array( [p.pose().xyz() for p in self.parts.values()] ).flatten() # position of parts in local relative coordinates
         self.body_xyz = (parts_xyz[0::3].mean(), parts_xyz[1::3].mean(), body_pose.xyz()[2])  # torso z is more informative than mean z
-        self.body_rpy = body_pose.rpy()
+        self.body_rpy = body_pose.rpy() # rotation of torso in global coordinates
         z = self.body_xyz[2]
         r, p, yaw = self.body_rpy
         if self.initial_z==None:
