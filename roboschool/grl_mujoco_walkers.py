@@ -44,7 +44,7 @@ class RoboschoolWalker2dGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.5 and abs(pitch) < 1.5 else (self.fail, self.rwFail)
+        return (self.alive, self.rwAlive) if z > 0.7 and abs(pitch) < 1.5 else (self.fail, self.rwFail)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         for n in ["foot_joint", "foot_left_joint"]:
@@ -57,7 +57,7 @@ class RoboschoolWalker2dBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         self.rwForward = 0
         self.rwTime = 0
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.5 and abs(pitch) < 1.5 else (self.fail, self.rwFail)
+        return (self.alive, self.rwAlive) if z > 0.7 and abs(pitch) < 1.5 else (self.fail, self.rwFail)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         for n in ["foot_joint", "foot_left_joint"]:
