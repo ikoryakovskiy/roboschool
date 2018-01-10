@@ -24,7 +24,7 @@ class RoboschoolHopperGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "hopper.xml", "torso", action_dim=3, obs_dim=15, power=0.75)
     def alive_bonus(self, z, pitch):
-        alive = self.rwAlive if z > 0.5 and abs(pitch) < 1.5 else self.rwFail
+        alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 else self.rwFail
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
         return (alive, sick)
 
@@ -35,7 +35,7 @@ class RoboschoolHopperBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         self.rwForward = 0
         self.rwTime = 0
     def alive_bonus(self, z, pitch):
-        alive = self.rwAlive if z > 0.5 and abs(pitch) < 1.5 else self.rwFail
+        alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 else self.rwFail
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
         return (alive, sick)
 
@@ -44,7 +44,7 @@ class RoboschoolWalker2dGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
     def alive_bonus(self, z, pitch):
-        alive = self.rwAlive if z > 0.5 and abs(pitch) < 1.5 else self.rwFail
+        alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 else self.rwFail
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
         return (alive, sick)
     def robot_specific_reset(self):
@@ -59,7 +59,7 @@ class RoboschoolWalker2dBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         self.rwForward = 0
         self.rwTime = 0
     def alive_bonus(self, z, pitch):
-        alive = self.rwAlive if z > 0.5 and abs(pitch) < 1.5 else self.rwFail
+        alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 else self.rwFail
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
         return (alive, sick)
     def robot_specific_reset(self):
