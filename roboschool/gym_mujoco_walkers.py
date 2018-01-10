@@ -12,12 +12,8 @@ class RoboschoolForwardWalkerMujocoXML(RoboschoolForwardWalker, RoboschoolMujoco
     rwFail = -1
     rwAlive = +1
     rwForward = 1
-    rwTime = 0
+    rwTime = -(rwAlive + 1.0/75.0) # In original Mujoco rwTime=0, but we want to encourage exploration
     rwWork = 1
-
-    # indicators of failure
-    alive = 0
-    fail = 2
 
     def __init__(self, fn, robot_name, action_dim, obs_dim, power):
         RoboschoolMujocoXmlEnv.__init__(self, fn, robot_name, action_dim, obs_dim)
@@ -28,23 +24,23 @@ class RoboschoolHopper(RoboschoolForwardWalkerMujocoXML):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "hopper.xml", "torso", action_dim=3, obs_dim=15, power=0.75)
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.8 and abs(pitch) < 1.0 else (self.fail, self.rwFail)
+        return (self.rwAlive, 0) if z > 0.8 and abs(pitch) < 1.0 else (self.rwFail, 0)
 
 class RoboschoolHopperBalancing(RoboschoolForwardWalkerMujocoXML):
     foot_list = ["foot"]
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "hopper.xml", "torso", action_dim=3, obs_dim=15, power=0.75)
         self.rwForward = 0
-        self.rwTime = 0
+        self.rwTime = -self.rwAlive
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.8 and abs(pitch) < 1.0 else (self.fail, self.rwFail)
+        return (self.rwAlive, 0) if z > 0.8 and abs(pitch) < 1.0 else (self.rwFail, 0)
 
 class RoboschoolWalker2d(RoboschoolForwardWalkerMujocoXML):
     foot_list = ["foot", "foot_left"]
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.8 and abs(pitch) < 1.0 else (self.fail, self.rwFail)
+        return (self.rwAlive, 0) if z > 0.8 and abs(pitch) < 1.0 else (self.rwFail, 0)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
         for n in ["foot_joint", "foot_left_joint"]:
@@ -55,9 +51,9 @@ class RoboschoolWalker2dBalancing(RoboschoolForwardWalkerMujocoXML):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
         self.rwForward = 0
-        self.rwTime = 0
+        self.rwTime = -self.rwAlive
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.8 and abs(pitch) < 1.0 else (self.fail, self.rwFail)
+        return (self.rwAlive, 0) if z > 0.8 and abs(pitch) < 1.0 else (self.rwFail, 0)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
         for n in ["foot_joint", "foot_left_joint"]:
@@ -69,7 +65,7 @@ class RoboschoolHalfCheetah(RoboschoolForwardWalkerMujocoXML):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
-        return (self.alive, self.rwAlive) if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else (self.fail, self.rwFail)
+        return (self.rwAlive, 0) if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else (self.rwFail, 0)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0
@@ -84,10 +80,10 @@ class RoboschoolHalfCheetahBalancing(RoboschoolForwardWalkerMujocoXML):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
         self.rwForward = 0
-        self.rwTime = 0
+        self.rwTime = -self.rwAlive
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
-        return (self.alive, self.rwAlive) if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else (self.fail, self.rwFail)
+        return (self.rwAlive, 0) if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else (self.rwFail, 0)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXML.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0
@@ -102,7 +98,7 @@ class RoboschoolAnt(RoboschoolForwardWalkerMujocoXML):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXML.__init__(self, "ant.xml", "torso", action_dim=8, obs_dim=28, power=2.5)
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.26 else (self.fail, self.rwFail)  # 0.25 is central sphere rad, die if it scrapes the ground
+        return (self.rwAlive, 0) if z > 0.26 else (self.rwFail, 0)  # 0.25 is central sphere rad, die if it scrapes the ground
 
 
 ## 3d Humanoid ##
@@ -164,4 +160,4 @@ class RoboschoolHumanoid(RoboschoolForwardWalkerMujocoXML):
             m.set_motor_torque( float(power*self.power*np.clip(a[i], -1, +1)) )
 
     def alive_bonus(self, z, pitch):
-        return (self.alive, +2*self.rwAlive) if z > 0.78 else (self.fail, self.rwFail)   # 2 here because 17 joints produce a lot of electricity cost just from policy noise, living must be better than dying
+        return (2*self.rwAlive, 0) if z > 0.78 else (self.rwFail, 0)   # 2 here because 17 joints produce a lot of electricity cost just from policy noise, living must be better than dying
