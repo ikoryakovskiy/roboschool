@@ -94,7 +94,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         # all rewards have rew/frame units and close to 1.0
         return - self.walk_target_dist / self.scene.dt
 
-    upright_cost         = -0.5    # discourage poor postures
+    sick                 = -0.5    # discourage poor postures
     electricity_cost     = -2.0    # cost for using motors -- this parameter should be carefully tuned against reward for making progress, other values less improtant
     stall_torque_cost    = -0.1    # cost for running electric current through a motor even at zero rotational speed, small
     foot_collision_cost  = -1.0    # touches another leg, or other objects, that cost makes robot avoid smashing feet into itself
@@ -109,9 +109,11 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         state = self.calc_state()  # also calculates self.joints_at_limit
         #pdb.set_trace()
 
-        done, alive = self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1])   # state[0] is body height above ground, body_rpy[1] is pitch
+        alive, sick = self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1])   # state[0] is body height above ground, body_rpy[1] is pitch
+        if alive < 0:
+            done = 2
         alive = float(alive) + self.rwTime
-        posture = self.upright_cost * np.abs(self.body_rpy[1])
+        health = self.sick * sick
 
         # Check for failures
         if done and not self.test:
@@ -140,7 +142,7 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
 
         self.rewards = [
             alive,
-            posture,
+            health,
             progress,
             electricity_cost,
             joints_at_limit_cost,
