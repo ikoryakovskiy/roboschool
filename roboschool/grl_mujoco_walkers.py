@@ -77,7 +77,6 @@ class RoboschoolHalfCheetahGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         alive = self.rwAlive if no_contacts and abs(pitch) < 1.0 else self.rwFail
         sick = 0 if no_contacts and abs(pitch) < 1.0 else 1
         return (alive, sick)
-
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0
@@ -95,7 +94,10 @@ class RoboschoolHalfCheetahBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         self.rwTime = 0
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
-        return (self.alive, self.rwAlive) if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else (self.fail, self.rwFail)
+        no_contacts = not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5]
+        alive = self.rwAlive if no_contacts and abs(pitch) < 1.0 else self.rwFail
+        sick = 0 if no_contacts and abs(pitch) < 1.0 else 1
+        return (alive, sick)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0
@@ -110,7 +112,9 @@ class RoboschoolAntGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "ant.xml", "torso", action_dim=8, obs_dim=28, power=2.5)
     def alive_bonus(self, z, pitch):
-        return (self.alive, self.rwAlive) if z > 0.26 else (self.fail, self.rwFail)  # 0.25 is central sphere rad, die if it scrapes the ground
+        alive = self.rwAlive if z > 0.26 else self.rwFail
+        sick = 0 if z > 0.26 else 1
+        return (alive, sick)  # 0.25 is central sphere rad, die if it scrapes the ground
 
 
 ## 3d Humanoid ##
@@ -172,4 +176,6 @@ class RoboschoolHumanoidGRL(RoboschoolForwardWalkerMujocoXMLGRL):
             m.set_motor_torque( float(power*self.power*np.clip(a[i], -1, +1)) )
 
     def alive_bonus(self, z, pitch):
-        return (self.alive, +2*self.rwAlive) if z > 0.78 else (self.fail, self.rwFail)   # 2 here because 17 joints produce a lot of electricity cost just from policy noise, living must be better than dying
+        alive = 2*self.rwAlive if z > 0.78 else self.rwFail
+        sick = 0 if z > 0.78 else 1
+        return (alive, sick)   # 2 here because 17 joints produce a lot of electricity cost just from policy noise, living must be better than dying
