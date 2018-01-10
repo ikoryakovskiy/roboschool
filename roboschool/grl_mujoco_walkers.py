@@ -73,7 +73,11 @@ class RoboschoolHalfCheetahGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "half_cheetah.xml", "torso", action_dim=6, obs_dim=26, power=0.90)
     def alive_bonus(self, z, pitch):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
-        return (self.alive, self.rwAlive) if np.abs(pitch) < 1.0 and not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5] else (self.fail, self.rwFail)
+        no_contacts = not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5]
+        alive = self.rwAlive if no_contacts and abs(pitch) < 1.0 else self.rwFail
+        sick = 0 if no_contacts and abs(pitch) < 1.0 else 1
+        return (alive, sick)
+
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
         self.jdict["bthigh"].power_coef = 120.0

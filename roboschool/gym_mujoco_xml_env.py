@@ -46,7 +46,7 @@ class RoboschoolMujocoXmlEnv(gym.Env):
         self.done = 0
         self.reward = 0
         self.test = test
-        dump = 0
+        dump = 1
         for r in self.mjcf:
             if dump: print("ROBOT '%s'" % r.root_part.name)
             if r.root_part.name==self.robot_name:

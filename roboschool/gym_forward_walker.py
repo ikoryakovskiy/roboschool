@@ -109,7 +109,8 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         state = self.calc_state()  # also calculates self.joints_at_limit
         #pdb.set_trace()
 
-        alive, sick = self.alive_bonus(state[0]+self.initial_z, self.body_rpy[1])   # state[0] is body height above ground, body_rpy[1] is pitch
+        max_brpy = np.max(np.abs(self.body_rpy)) # (0, a, 0) => a (upward direction), (pi, a, pi) => pi (downward direction)
+        alive, sick = self.alive_bonus(state[0]+self.initial_z, max_brpy)   # state[0] is body height above ground, body_rpy[1] is pitch
         done = 2*int(alive < 0)
         alive = float(alive) + self.rwTime
         health = self.sick * sick
