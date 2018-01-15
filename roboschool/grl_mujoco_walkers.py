@@ -43,6 +43,8 @@ class RoboschoolWalker2dGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["foot", "foot_left", "thigh", "thigh_left"]
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
+        self.rwForward = 2
+        self.sick = -1
     def alive_bonus(self, z, pitch):
         alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 and not self.feet_contact[2] and not self.feet_contact[3] else self.rwFail
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
@@ -58,6 +60,7 @@ class RoboschoolWalker2dBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
         self.rwForward = 0
         self.rwTime = 0
+        self.sick = -1
     def alive_bonus(self, z, pitch):
         alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 and not self.feet_contact[2] and not self.feet_contact[3] else self.rwFail
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
