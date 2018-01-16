@@ -8,6 +8,10 @@ class RoboschoolAtlasForwardWalk(RoboschoolForwardWalker, RoboschoolUrdfEnv):
     random_yaw = False
     foot_list = ["r_foot", "l_foot"]
 
+    rwForward = 1
+    rwTime = 0 # -(rwAlive + 1.0/75.0) # In original Mujoco rwTime=0, but we want to encourage exploration
+    rwWork = 1
+
     def __init__(self):
         RoboschoolForwardWalker.__init__(self, power=0.30)
         RoboschoolUrdfEnv.__init__(self,

@@ -12,7 +12,7 @@ class RoboschoolForwardWalkerMujocoXML(RoboschoolForwardWalker, RoboschoolMujoco
     rwFail = -1
     rwAlive = +1
     rwForward = 1
-    rwTime = -(rwAlive + 1.0/75.0) # In original Mujoco rwTime=0, but we want to encourage exploration
+    rwTime = 0 # -(rwAlive + 1.0/75.0) # In original Mujoco rwTime=0, but we want to encourage exploration
     rwWork = 1
 
     def __init__(self, fn, robot_name, action_dim, obs_dim, power):
