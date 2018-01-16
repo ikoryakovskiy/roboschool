@@ -32,7 +32,8 @@ class RoboschoolAtlasForwardWalk(RoboschoolForwardWalker, RoboschoolUrdfEnv):
         # We fix that by a bit of reward engineering.
         knees = np.array([j.current_relative_position() for j in [self.jdict["l_leg_kny"], self.jdict["r_leg_kny"]]], dtype=np.float32).flatten()
         knees_at_limit = np.count_nonzero(np.abs(knees[0::2]) > 0.99)
-        return +4-knees_at_limit if z > 1.3 else -1
+        sick = 0
+        return (+4-knees_at_limit if z > 1.3 else -1, sick)
 
     def robot_specific_reset(self):
         RoboschoolForwardWalker.robot_specific_reset(self)
