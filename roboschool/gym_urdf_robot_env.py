@@ -34,7 +34,8 @@ class RoboschoolUrdfEnv(gym.Env):
         self.np_random, seed = gym.utils.seeding.np_random(seed)
         return [seed]
 
-    def _reset(self):
+    def _reset(self, test=False):
+        self.test = test
         if self.scene is None:
             self.scene = self.create_single_player_scene()
         if not self.scene.multiplayer:

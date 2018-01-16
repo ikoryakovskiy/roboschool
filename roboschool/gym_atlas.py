@@ -36,7 +36,11 @@ class RoboschoolAtlasForwardWalk(RoboschoolForwardWalker, RoboschoolUrdfEnv):
 
     def robot_specific_reset(self):
         RoboschoolForwardWalker.robot_specific_reset(self)
-        self.set_initial_orientation(yaw_center=0, yaw_random_spread=np.pi)
+        if not self.test:
+            yaw_random_spread = 0
+        else:
+            yaw_random_spread=np.pi
+        self.set_initial_orientation(yaw_center=0, yaw_random_spread=yaw_random_spread)
         self.head = self.parts["head"]
 
     random_yaw = False
