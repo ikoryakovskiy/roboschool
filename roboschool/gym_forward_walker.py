@@ -156,7 +156,8 @@ class RoboschoolForwardWalker(SharedMemoryClientEnv):
         self.reward += sum(self.rewards)
         self.HUD(state, a, done)
         str_info = {}
-        if self.test:
+        report_all = True
+        if self.test or report_all:
             ti = self.frame * self.TIMESTEP
             walk_dist  = np.linalg.norm( [self.body_xyz[1], self.body_xyz[0]] )
             str_info = "{:15f}{:15d}{:15f}".format(ti, self.falls, walk_dist)
