@@ -73,15 +73,15 @@ class RoboschoolWalker2dBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
 class RoboschoolWalker2d2GRL(RoboschoolWalker2dGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d2.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
-        self.rwForward = 2
-        self.sick = -1
+        #self.rwForward = 2
+        #self.sick = -1
 
 class RoboschoolWalker2d2BalancingGRL(RoboschoolWalker2dBalancingGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d2.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
         self.rwForward = 0
         self.rwTime = 0
-        self.sick = -1
+        #self.sick = -1
 
 class RoboschoolHalfCheetahGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["ffoot", "fshin", "fthigh",  "bfoot", "bshin", "bthigh"]  # track these contacts with ground
