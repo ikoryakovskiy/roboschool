@@ -97,7 +97,7 @@ class RoboschoolHalfCheetahGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
         no_contacts = not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5]
         alive = self.rwAlive if no_contacts and abs(pitch) < 1.0 else self.rwFail
-        sick = 0 if no_contacts and abs(pitch) < 1.0 else 1
+        sick = 0
         return (alive, sick)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
@@ -118,7 +118,7 @@ class RoboschoolHalfCheetahBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         # Use contact other than feet to terminate episode: due to a lot of strange walks using knees
         no_contacts = not self.feet_contact[1] and not self.feet_contact[2] and not self.feet_contact[4] and not self.feet_contact[5]
         alive = self.rwAlive if no_contacts and abs(pitch) < 1.0 else self.rwFail
-        sick = 0 if no_contacts and abs(pitch) < 1.0 else 1
+        sick = 0
         return (alive, sick)
     def robot_specific_reset(self):
         RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
