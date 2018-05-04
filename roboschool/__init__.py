@@ -119,6 +119,13 @@ register(
     tags={ "pg_complexity": 8*1000000 },
     )
 register(
+    id='RoboschoolWalker2dBalancingGRL_TF-v1',
+    entry_point='roboschool:RoboschoolWalker2dBalancingGRL_TF',
+    max_episode_steps=1000,
+    reward_threshold=2500.0,
+    tags={ "pg_complexity": 8*1000000 },
+    )
+register(
     id='RoboschoolWalker2d2GRL-v1',
     entry_point='roboschool:RoboschoolWalker2d2GRL',
     max_episode_steps=1000,
@@ -214,6 +221,7 @@ from roboschool.grl_mujoco_walkers import RoboschoolWalker2dGRL
 from roboschool.grl_mujoco_walkers import RoboschoolWalker2dBalancingGRL
 from roboschool.grl_mujoco_walkers import RoboschoolWalker2d2GRL
 from roboschool.grl_mujoco_walkers import RoboschoolWalker2d2BalancingGRL
+from roboschool.grl_mujoco_walkers import RoboschoolWalker2d2BalancingGRL_TF
 from roboschool.grl_mujoco_walkers import RoboschoolHalfCheetahGRL
 from roboschool.grl_mujoco_walkers import RoboschoolHalfCheetahBalancingGRL
 from roboschool.grl_mujoco_walkers import RoboschoolAntGRL

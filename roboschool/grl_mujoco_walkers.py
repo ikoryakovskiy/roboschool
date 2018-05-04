@@ -74,6 +74,24 @@ class RoboschoolWalker2dBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         for n in ["foot_joint", "foot_left_joint"]:
             self.jdict[n].power_coef = 30.0
 
+class RoboschoolWalker2dBalancingGRL_TF(RoboschoolForwardWalkerMujocoXMLGRL):
+    foot_list = ["foot", "foot_left", "thigh", "thigh_left"]
+    def __init__(self):
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d_tf.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
+        # obs_dim = 8 (global orientation) + action_dim*2 (angles+velocities) + 2 (contact) = 22
+        # actual return is 25
+        self.rwForward = 0
+        self.rwTime = 0
+        #self.sick = -1
+    def alive_bonus(self, z, pitch):
+        alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 and not self.feet_contact[2] and not self.feet_contact[3] else self.rwFail
+        sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
+        return (alive, sick)
+    def robot_specific_reset(self):
+        RoboschoolForwardWalkerMujocoXMLGRL.robot_specific_reset(self)
+        for n in ["foot_joint", "foot_left_joint"]:
+            self.jdict[n].power_coef = 30.0
+
 class RoboschoolWalker2d2GRL(RoboschoolWalker2dGRL):
     def __init__(self):
         RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "walker2d2.xml", "torso", action_dim=6, obs_dim=22, power=0.40)
