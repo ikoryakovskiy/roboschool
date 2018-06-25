@@ -41,6 +41,19 @@ class RoboschoolHopperBalancingGRL(RoboschoolForwardWalkerMujocoXMLGRL):
         sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
         return (alive, sick)
 
+class RoboschoolHopperBalancingGRL_TF(RoboschoolForwardWalkerMujocoXMLGRL):
+    foot_list = ["foot", "thigh"]
+    def __init__(self):
+        RoboschoolForwardWalkerMujocoXMLGRL.__init__(self, "hopper_tf.xml", "torso", action_dim=3, obs_dim=15, power=0.75)
+        # obs_dim = 8 (global orientation) + action_dim*2 (angles+velocities) + 1 (contact) = 15
+        # actual return includes contacts of both foot and thigh and forward promotion => 17
+        self.rwForward = 0
+        self.rwTime = 0
+    def alive_bonus(self, z, pitch):
+        alive = self.rwAlive if z > 0.6 and abs(pitch) < 1.5 and not self.feet_contact[1] else self.rwFail
+        sick = 0 if z > 0.8 and abs(pitch) < 1.0 else 1
+        return (alive, sick)
+
 class RoboschoolWalker2dGRL(RoboschoolForwardWalkerMujocoXMLGRL):
     foot_list = ["foot", "foot_left", "thigh", "thigh_left"]
     def __init__(self):
